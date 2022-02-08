@@ -5,6 +5,12 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invicta.Geodesy", "Invicta.Geodesy\Invicta.Geodesy.csproj", "{EEBE6D66-4A50-4948-BF3B-2F65BC93E645}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invitca.Numerics", "Invitca.Numerics\Invitca.Numerics\Invitca.Numerics.csproj", "{69E1274B-7E13-41C6-896A-F19C80BA58C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Invitca.Numerics.Test", "Invitca.Numerics\Invitca.Numerics.Test\Invitca.Numerics.Test.csproj", "{56A3746E-53EF-4BFD-80D8-1A478253BF1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invicta.Geodesy.Test", "Invicta.Geodesy.Test\Invicta.Geodesy.Test.csproj", "{0873BD49-1573-4914-A10D-3F10744EB373}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{EEBE6D66-4A50-4948-BF3B-2F65BC93E645}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEBE6D66-4A50-4948-BF3B-2F65BC93E645}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEBE6D66-4A50-4948-BF3B-2F65BC93E645}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69E1274B-7E13-41C6-896A-F19C80BA58C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E1274B-7E13-41C6-896A-F19C80BA58C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E1274B-7E13-41C6-896A-F19C80BA58C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E1274B-7E13-41C6-896A-F19C80BA58C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56A3746E-53EF-4BFD-80D8-1A478253BF1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56A3746E-53EF-4BFD-80D8-1A478253BF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56A3746E-53EF-4BFD-80D8-1A478253BF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56A3746E-53EF-4BFD-80D8-1A478253BF1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0873BD49-1573-4914-A10D-3F10744EB373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0873BD49-1573-4914-A10D-3F10744EB373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0873BD49-1573-4914-A10D-3F10744EB373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0873BD49-1573-4914-A10D-3F10744EB373}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Invitca.Numerics\Invitca.Numerics\Invitca.Numerics.csproj" />
+  </ItemGroup>
+
 </Project>
