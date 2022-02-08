@@ -1,0 +1,3 @@
+[submodule "Invitca.Numerics"]
+	path = Invitca.Numerics
+	url = https://github.com/Andrew-Pollard/Invitca.Numerics
