@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Invitca.Numerics\Invitca.Numerics\Invitca.Numerics.csproj" />
+    <ProjectReference Include="..\Invicta.Numerics\Invicta.Numerics\Invicta.Numerics.csproj" />
   </ItemGroup>
 
 </Project>
