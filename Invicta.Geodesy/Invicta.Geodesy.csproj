@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Invicta.Geodesy</PackageId>
+		<Version>0.0.0</Version>
+    <Authors>Andrew Pollard, .NET Foundation and Contributors</Authors>
+		<Description>A library for representing and manipulating geographic information.</Description>
+    <Copyright>Copyright (c) Andrew Pollard, .NET Foundation and Contributors.</Copyright>
+		<PackageProjectUrl>https://github.com/Andrew-Pollard/Invicta.Geodesy</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/Andrew-Pollard/Invicta.Geodesy</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>invicta geodesy geodetics latitude longitude altitude geographic coordinate</PackageTags>
+		<PackageReleaseNotes>Version 0.0.0.</PackageReleaseNotes>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Invicta.Geodesy</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="" />
+    <None Include="../LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="../THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.CLSCompliantAttribute">
+      <_Parameter1>true</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
