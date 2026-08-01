@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Invicta.Geodesy.Tests/Invicta.Geodesy.Tests.csproj" Id="73981081-3280-41ee-8e61-203df35d249d" />
   <Project Path="Invicta.Geodesy/Invicta.Geodesy.csproj" />
 </Solution>
