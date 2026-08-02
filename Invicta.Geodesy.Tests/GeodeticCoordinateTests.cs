@@ -50,6 +50,68 @@ namespace Invicta.Geodesy.Tests
             [new GeodeticCoordinate(4.0d, 4.0d, 4.0d), 4.0d],
         ];
 
+        private static IEnumerable<object[]> ClampCases => [
+            [new GeodeticCoordinate(-2.0d, -3.0d, -4.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(-1.0d, -2.0d, -3.0d) */],
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(-1.0d, -2.0d, -3.0d) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(1.0d, 2.0d, 3.0d) */],
+            [new GeodeticCoordinate(2.0d, 3.0d, 4.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(1.0d, 2.0d, 3.0d) */],
+        ];
+
+        private static IEnumerable<object[]> ClampWithMinEqualToMaxCases => [
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+        ];
+
+        private const double NaN = double.NaN;
+        private static IEnumerable<object[]> ClampWithNaNCases => [
+            // NaN, [-, +] => NaN
+            [new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+
+            // x, [NaN, +] => NaN
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(1.0d, 2.0d, 3.0d) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+
+            // x, [-, NaN] => NaN
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+
+            // x, [NaN, NaN] => NaN
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+            [new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(NaN, NaN, NaN), new GeodeticCoordinate(NaN, NaN, NaN) /* , new GeodeticCoordinate(NaN, NaN, NaN) */],
+        ];
+
+        private const double Nz = double.NegativeZero;
+        private static IEnumerable<object[]> ClampWithNegativeZeroCases => [
+            // x, [-0, -0] => -0
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+            [new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+
+            // x, [+0, -0] => -0
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+            [new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(Nz, Nz, Nz) /* , new GeodeticCoordinate(Nz, Nz, Nz) */],
+
+            // x, [-0, +0] => +0
+            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+            [new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+
+            // x, [+0, +0] => +0
+            [new GeodeticCoordinate(Nz, Nz, Nz), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d) /* , new GeodeticCoordinate(0.0d, 0.0d, 0.0d) */],
+        ];
+
         private static IEnumerable<object[]> Clamp_WithMinimumGreaterThanMaximumCases => [
             // 1 out of range
             [new GeodeticCoordinate(1.0d, -2.0d, -3.0d), new GeodeticCoordinate(-1.0d, 2.0d, 3.0d)],
@@ -65,31 +127,17 @@ namespace Invicta.Geodesy.Tests
             [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d)],
         ];
 
-        private static IEnumerable<object[]> ClampCases => [
-            // min = max
-            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d)],
-            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d)],
-            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d)],
-
-            // min < max
-            [new GeodeticCoordinate(-2.0d, -3.0d, -4.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d)],
-            [new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d)],
-            [new GeodeticCoordinate(0.0d, 0.0d, 0.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(0.0d, 0.0d, 0.0d)],
-            [new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d)],
-            [new GeodeticCoordinate(2.0d, 3.0d, 4.0d), new GeodeticCoordinate(-1.0d, -2.0d, -3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d), new GeodeticCoordinate(1.0d, 2.0d, 3.0d)],
-        ];
-
         #region Constructors
         [Test]
         public void ValueConstructor_PopulatesFieldsCorrectly()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate coordinate = new(1.0d, 2.0d, 3.0d);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(a.Latitude, Is.EqualTo(1.0d));
-                Assert.That(a.Longitude, Is.EqualTo(2.0d));
-                Assert.That(a.Altitude, Is.EqualTo(3.0d));
+                Assert.That(coordinate.Latitude, Is.EqualTo(1.0d));
+                Assert.That(coordinate.Longitude, Is.EqualTo(2.0d));
+                Assert.That(coordinate.Altitude, Is.EqualTo(3.0d));
             }
         }
 
@@ -104,26 +152,26 @@ namespace Invicta.Geodesy.Tests
         [Test]
         public void SpanConstructor_WithThreeValues_PopulatesFieldsCorrectly()
         {
-            GeodeticCoordinate a = new([1.0d, 2.0d, 3.0d]);
+            GeodeticCoordinate coordinate = new([1.0d, 2.0d, 3.0d]);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(a.Latitude, Is.EqualTo(1.0d));
-                Assert.That(a.Longitude, Is.EqualTo(2.0d));
-                Assert.That(a.Altitude, Is.EqualTo(3.0d));
+                Assert.That(coordinate.Latitude, Is.EqualTo(1.0d));
+                Assert.That(coordinate.Longitude, Is.EqualTo(2.0d));
+                Assert.That(coordinate.Altitude, Is.EqualTo(3.0d));
             }
         }
 
         [Test]
         public void SpanConstructor_WithMoreThanThreeValues_PopulatesFieldsCorrectly()
         {
-            GeodeticCoordinate a = new([1.0d, 2.0d, 3.0d, 4.0d, 5.0d]);
+            GeodeticCoordinate coordinate = new([1.0d, 2.0d, 3.0d, 4.0d, 5.0d]);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(a.Latitude, Is.EqualTo(1.0d));
-                Assert.That(a.Longitude, Is.EqualTo(2.0d));
-                Assert.That(a.Altitude, Is.EqualTo(3.0d));
+                Assert.That(coordinate.Latitude, Is.EqualTo(1.0d));
+                Assert.That(coordinate.Longitude, Is.EqualTo(2.0d));
+                Assert.That(coordinate.Altitude, Is.EqualTo(3.0d));
             }
         }
         #endregion
@@ -145,10 +193,10 @@ namespace Invicta.Geodesy.Tests
         [Test]
         public void op_Addition_ReturnsExpectedResult()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
-            GeodeticCoordinate b = new(4.0d, 5.0d, 6.0d);
+            GeodeticCoordinate left = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate right = new(4.0d, 5.0d, 6.0d);
 
-            GeodeticCoordinate result = a + b;
+            GeodeticCoordinate result = left + right;
 
             using (Assert.EnterMultipleScope())
             {
@@ -161,62 +209,80 @@ namespace Invicta.Geodesy.Tests
         [Test]
         public void op_Equality_WithSameValues_ReturnsTrue()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate coordinate = new(1.0d, 2.0d, 3.0d);
 
-            Assert.That(a == a, Is.True);
+            Assert.That(coordinate == coordinate, Is.True);
         }
 
         [Test]
         public void op_Equality_WithEqualValues_ReturnsTrue()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
-            GeodeticCoordinate b = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate left = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate right = new(1.0d, 2.0d, 3.0d);
 
-            Assert.That(a == b, Is.True);
+            Assert.That(left == right, Is.True);
         }
 
         [TestCaseSource(nameof(UnequalCases))]
-        public void op_Equality_WithUnequalValues_ReturnsFalse(GeodeticCoordinate a, GeodeticCoordinate b)
+        public void op_Equality_WithUnequalValues_ReturnsFalse(GeodeticCoordinate left, GeodeticCoordinate right)
         {
-            Assert.That(a == b, Is.False);
+            Assert.That(left == right, Is.False);
+        }
+
+        [Test]
+        public void op_Equality_WithNaN_ReturnsFalse()
+        {
+            GeodeticCoordinate left = new(NaN, NaN, NaN);
+            GeodeticCoordinate right = new(NaN, NaN, NaN);
+
+            Assert.That(left == right, Is.False);
         }
 
         [Test]
         public void op_Inequality_WithSameValues_ReturnsFalse()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate coordinate = new(1.0d, 2.0d, 3.0d);
 
-            Assert.That(a != a, Is.False);
+            Assert.That(coordinate != coordinate, Is.False);
         }
 
         [Test]
         public void op_Inequality_WithEqualValues_ReturnsFalse()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
-            GeodeticCoordinate b = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate left = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate right = new(1.0d, 2.0d, 3.0d);
 
-            Assert.That(a != b, Is.False);
+            Assert.That(left != right, Is.False);
         }
 
         [TestCaseSource(nameof(UnequalCases))]
-        public void op_Inequality_WithUnequalValues_ReturnsTrue(GeodeticCoordinate a, GeodeticCoordinate b)
+        public void op_Inequality_WithUnequalValues_ReturnsTrue(GeodeticCoordinate left, GeodeticCoordinate right)
         {
-            Assert.That(a != b, Is.True);
+            Assert.That(left != right, Is.True);
+        }
+
+        [Test]
+        public void op_Inequality_WithNaN_ReturnsTrue()
+        {
+            GeodeticCoordinate left = new(NaN, NaN, NaN);
+            GeodeticCoordinate right = new(NaN, NaN, NaN);
+
+            Assert.That(left != right, Is.True);
         }
 
         [Test]
         public void op_Subtraction_ReturnsExpectedResult()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
-            GeodeticCoordinate b = new(4.0d, 5.0d, 6.0d);
+            GeodeticCoordinate left = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate right = new(4.0d, 5.0d, 6.0d);
 
-            GeodeticCoordinate result = a - b;
+            GeodeticCoordinate result = left - right;
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(result.Latitude, Is.EqualTo(a.Latitude - b.Latitude));
-                Assert.That(result.Longitude, Is.EqualTo(a.Longitude - b.Longitude));
-                Assert.That(result.Altitude, Is.EqualTo(a.Altitude - b.Altitude));
+                Assert.That(result.Latitude, Is.EqualTo(left.Latitude - right.Latitude));
+                Assert.That(result.Longitude, Is.EqualTo(left.Longitude - right.Longitude));
+                Assert.That(result.Altitude, Is.EqualTo(left.Altitude - right.Altitude));
             }
         }
         #endregion
@@ -225,63 +291,96 @@ namespace Invicta.Geodesy.Tests
         [Test]
         public void Add_ReturnsExpectedResult()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
-            GeodeticCoordinate b = new(4.0d, 5.0d, 6.0d);
+            GeodeticCoordinate left = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate right = new(4.0d, 5.0d, 6.0d);
 
-            GeodeticCoordinate result = GeodeticCoordinate.Add(a, b);
+            GeodeticCoordinate result = GeodeticCoordinate.Add(left, right);
 
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(result.Latitude, Is.EqualTo(a.Latitude + b.Latitude));
-                Assert.That(result.Longitude, Is.EqualTo(a.Longitude + b.Longitude));
-                Assert.That(result.Altitude, Is.EqualTo(a.Altitude + b.Altitude));
+                Assert.That(result.Latitude, Is.EqualTo(left.Latitude + right.Latitude));
+                Assert.That(result.Longitude, Is.EqualTo(left.Longitude + right.Longitude));
+                Assert.That(result.Altitude, Is.EqualTo(left.Altitude + right.Altitude));
             }
         }
 
         [Test]
         public void All_WithAllMatchingValues_ReturnsTrue()
         {
-            GeodeticCoordinate a = new(4.0d, 4.0d, 4.0d);
+            GeodeticCoordinate coordinate = new(4.0d, 4.0d, 4.0d);
 
-            Assert.That(GeodeticCoordinate.All(a, 4.0d), Is.True);
+            Assert.That(GeodeticCoordinate.All(coordinate, 4.0d), Is.True);
         }
 
         [TestCaseSource(nameof(All_WithNotAllMatchingCases))]
-        public void All_WithNotAllMatchingValues_ReturnsFalse(GeodeticCoordinate a, double v)
+        public void All_WithNotAllMatchingValues_ReturnsFalse(GeodeticCoordinate coordinate, double value)
         {
-            Assert.That(GeodeticCoordinate.All(a, v), Is.False);
+            Assert.That(GeodeticCoordinate.All(coordinate, value), Is.False);
         }
 
         [TestCaseSource(nameof(Any_WithAtLeastOneMatchingCases))]
-        public void Any_WithAtLeastOneMatchingValue_ReturnsTrue(GeodeticCoordinate a, double v)
+        public void Any_WithAtLeastOneMatchingValue_ReturnsTrue(GeodeticCoordinate coordinate, double value)
         {
-            Assert.That(GeodeticCoordinate.Any(a, v), Is.True);
+            Assert.That(GeodeticCoordinate.Any(coordinate, value), Is.True);
         }
 
         [Test]
         public void Any_WithNoMatchingValues_ReturnsFalse()
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate coordinate = new(1.0d, 2.0d, 3.0d);
 
-            Assert.That(GeodeticCoordinate.All(a, 4.0d), Is.False);
+            Assert.That(GeodeticCoordinate.All(coordinate, 4.0d), Is.False);
+        }
+
+        [TestCaseSource(nameof(ClampCases))]
+        [TestCaseSource(nameof(ClampWithMinEqualToMaxCases))]
+        [TestCaseSource(nameof(ClampWithNaNCases))]
+        [TestCaseSource(nameof(ClampWithNegativeZeroCases))]
+        public void Clamp_ReturnsSameResultAsDoubleClamp(
+            GeodeticCoordinate value, GeodeticCoordinate min, GeodeticCoordinate max)
+        {
+            GeodeticCoordinate result = GeodeticCoordinate.Clamp(value, min, max);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(result.Latitude, Is.EqualTo(double.Clamp(value.Latitude, min.Latitude, max.Latitude)));
+                Assert.That(result.Longitude, Is.EqualTo(double.Clamp(value.Longitude, min.Longitude, max.Longitude)));
+                Assert.That(result.Altitude, Is.EqualTo(double.Clamp(value.Altitude, min.Altitude, max.Altitude)));
+            }
         }
 
         [TestCaseSource(nameof(Clamp_WithMinimumGreaterThanMaximumCases))]
         public void Clamp_WithMinimumGreaterThanMaximum_ThrowsArgumentException(GeodeticCoordinate min, GeodeticCoordinate max)
         {
-            GeodeticCoordinate a = new(1.0d, 2.0d, 3.0d);
+            GeodeticCoordinate value = new(1.0d, 2.0d, 3.0d);
 
-            Assert.That(() => GeodeticCoordinate.Clamp(a, min, max), Throws.ArgumentException);
+            Assert.That(() => GeodeticCoordinate.Clamp(value, min, max), Throws.ArgumentException);
         }
 
         [TestCaseSource(nameof(ClampCases))]
-        public void Clamp_ReturnsExpectedResult(
-            GeodeticCoordinate a, GeodeticCoordinate min, GeodeticCoordinate max, GeodeticCoordinate expectedResult)
+        [TestCaseSource(nameof(ClampWithMinEqualToMaxCases))]
+        [TestCaseSource(nameof(ClampWithNaNCases))]
+        [TestCaseSource(nameof(ClampWithNegativeZeroCases))]
+        public void ClampNative_ReturnsSameResultAsDoubleClampNative(
+            GeodeticCoordinate value, GeodeticCoordinate min, GeodeticCoordinate max)
         {
-            Assert.That(GeodeticCoordinate.Clamp(a, min, max), Is.EqualTo(expectedResult));
+            GeodeticCoordinate result = GeodeticCoordinate.ClampNative(value, min, max);
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(result.Latitude, Is.EqualTo(double.ClampNative(value.Latitude, min.Latitude, max.Latitude)));
+                Assert.That(result.Longitude, Is.EqualTo(double.ClampNative(value.Longitude, min.Longitude, max.Longitude)));
+                Assert.That(result.Altitude, Is.EqualTo(double.ClampNative(value.Altitude, min.Altitude, max.Altitude)));
+            }
         }
 
-        // TODO NaN and NegativeZero
+        [TestCaseSource(nameof(Clamp_WithMinimumGreaterThanMaximumCases))]
+        public void ClampNative_WithMinimumGreaterThanMaximum_ThrowsArgumentException(GeodeticCoordinate min, GeodeticCoordinate max)
+        {
+            GeodeticCoordinate value = new(1.0d, 2.0d, 3.0d);
+
+            Assert.That(() => GeodeticCoordinate.ClampNative(value, min, max), Throws.ArgumentException);
+        }
         #endregion
     }
 }
