@@ -68,6 +68,8 @@ namespace Invicta.Geodesy
         /// <value>A coordinate whose elements are equal to zero (that is, it returns the coordinate <c>(0,0,0)</c>).</value>
         public static GeodeticCoordinate Zero => new(0.0d, 0.0d, 0.0d);
 
+        // NaN?
+
         // INDEXER?
 
         /// <summary>Adds two coordinates together.</summary>
